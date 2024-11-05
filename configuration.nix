@@ -87,13 +87,13 @@
     git
     gh
     gcc
-    obs-studio
+    rar
+    unrar
+    nixfmt-rfc-style
 
     xclip
     xsel
-
-    rar
-    unrar
+    file
 
     kdePackages.plasma-desktop
     kdePackages.plasma5support
@@ -107,8 +107,8 @@
     kdePackages.ksvg
 
     element-desktop
-
     ryujinx
+    obs-studio
 
     # JP typing
     fcitx5-mozc
