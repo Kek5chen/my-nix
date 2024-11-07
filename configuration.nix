@@ -4,9 +4,13 @@
 
 { config, lib, pkgs, ... }:
 
-#let
+let
 #  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-#in
+  rustBin = pkgs.rust-bin.nightly.latest.default.override {
+    extensions = [ "rust-src" ];
+    targets = [ "x86_64-pc-windows-gnu" ];
+  };
+in
 {
   imports =
     [
@@ -26,7 +30,7 @@
       #(import "${home-manager}/nixos")
     ];
 
-  nixpkgs.overlays = [ (import ./unstable-overlay.nix) ];
+  nixpkgs.overlays = [ (import ./unstable-overlay.nix) (import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz")) ];
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes
@@ -91,6 +95,9 @@
     unrar
     nixfmt-rfc-style
 
+    # Rust
+    rustBin
+
     xclip
     xsel
     file
@@ -146,6 +153,7 @@
   };
 
   services.openssh.enable = true;
+  
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -173,8 +181,7 @@
   #
   # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
   # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  # # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.05"; # Did you read the comment?
 
 }
