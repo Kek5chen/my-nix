@@ -57,7 +57,7 @@ in
 
     users.kx = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nordvpn" ];
+      extraGroups = [ "wheel" "nordvpn" "docker" ];
       packages = with pkgs; [
         tree
       ];
@@ -117,12 +117,16 @@ in
     ryujinx
     obs-studio
 
+
     # JP typing
     fcitx5-mozc
+
+    atlauncher
   ];
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
    "spotify"
+   "atlauncher"
 
    "steam"
    "steam-run"
@@ -153,7 +157,12 @@ in
   };
 
   services.openssh.enable = true;
-  
+  services.unclutter.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    rootless.enable = true;
+    rootless.setSocketVariable = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
