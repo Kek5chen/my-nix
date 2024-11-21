@@ -22,8 +22,7 @@ in
       ./system/sound.nix
       ./system/windowing.nix
 
-      ./programs/zsh/shell.nix
-      ./programs/nordvpn/nordvpn.nix
+      ./programs/zsh/shell.nix ./programs/nordvpn/nordvpn.nix
       ./programs/steam/steam.nix
 
       # Home Manager
@@ -32,9 +31,18 @@ in
 
   nixpkgs.overlays = [ (import ./unstable-overlay.nix) (import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz")) ];
 
+  nix.settings.auto-optimise-store = true;
+  nix.settings.cores = 16;
+  nix.settings.max-jobs = "auto";
   nix.extraOptions = ''
     experimental-features = nix-command flakes
+    bash-prompt = "${pkgs.zsh}/bin/zsh"
   '';
+
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = [
+    "v4l2loopback"
+  ];
 
 
   # Use the systemd-boot EFI boot loader.
@@ -74,7 +82,9 @@ in
     brave
     jetbrains.clion
     jetbrains.rust-rover
-    qbittorrent
+    jetbrains.idea-ultimate
+    #qbittorrent
+    postman
 
     # Free as in freedom
     librewolf
@@ -94,6 +104,11 @@ in
     rar
     unrar
     nixfmt-rfc-style
+    gradle
+    glib
+    jdk21
+    pkg-config
+    openssl
 
     # Rust
     rustBin
@@ -127,6 +142,7 @@ in
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
    "spotify"
    "atlauncher"
+   "davinci-resolve"
 
    "steam"
    "steam-run"
@@ -136,6 +152,7 @@ in
 
    "clion"
    "rust-rover"
+   "idea-ultimate"
 
    "nvidia-x11"
    "nvidia-settings"
@@ -157,7 +174,6 @@ in
   };
 
   services.openssh.enable = true;
-  services.unclutter.enable = true;
   virtualisation.docker = {
     enable = true;
     rootless.enable = true;

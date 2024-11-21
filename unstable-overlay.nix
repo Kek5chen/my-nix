@@ -6,9 +6,14 @@ in
   unstable.config.allowUnfreePredicate = pkg: builtins.elem (unstable.lib.getName pkg) [
     "clion"
   ];
-  neovim = unstable.neovim;
+
   ryujinx = unstable.callPackage ./programs/ryujinx/package.nix {};
-  jetbrains = unstable.jetbrains;
+  jetbrains = unstable.callPackage ./programs/jetbrains {};
+
+  inherit (unstable)
+    neovim
+    #jetbrains
+    gradle;
 }
 
 

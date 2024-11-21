@@ -1,11 +1,13 @@
 {
   lib,
   buildDotnetModule,
-  dotnetCorePackages,
+  cctools,
   darwin,
+  dotnetCorePackages,
   fetchFromGitHub,
   libX11,
   libgdiplus,
+  moltenvk,
   ffmpeg,
   openal,
   libsoundio,
@@ -28,18 +30,18 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.2.72";
+  version = "1.2.76";
 
   src = fetchFromGitHub {
     owner = "GreemDev";
     repo = "Ryujinx";
-    rev = "master";
-    hash = "sha256-5lfqx4zoHw6b36e4rA5uh3bGmD1BLtGPjUMh3y4NfTg=";
+    rev = version;
+    hash = "sha256-CDjRqYRvkqRJbB8q2LGWIbkXZmOVPwVyxgYNxyEyTXs=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin [
+    cctools
     darwin.sigtool
-    darwin.cctools
   ];
 
   enableParallelBuilding = false;
@@ -77,7 +79,7 @@ buildDotnetModule rec {
       udev
       pulseaudio
     ]
-    ++ lib.optional stdenv.isDarwin [ darwin.moltenvk ];
+    ++ lib.optional stdenv.isDarwin [ moltenvk ];
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
@@ -126,9 +128,6 @@ buildDotnetModule rec {
       install -D ./Ryujinx.sh       $out/bin/Ryujinx.sh
       install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
       install -D ../misc/Logo.svg   $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
-
-      substituteInPlace $out/share/applications/Ryujinx.desktop \
-        --replace "Ryujinx.sh %f" "$out/bin/Ryujinx.sh %f"
 
       popd
     ''}
