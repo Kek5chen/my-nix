@@ -1,19 +1,20 @@
 self: super:
 let
-  unstable = (import <nixpkgs-unstable> { });
+  unfreePredicate = import ./unfree-pkgs.nix self ;
+  unstable = (import <nixpkgs-unstable> { config.allowUnfreePredicate = unfreePredicate; });
 in
 {
-  unstable.config.allowUnfreePredicate = pkg: builtins.elem (unstable.lib.getName pkg) [
-    "clion"
-  ];
-
   ryujinx = unstable.callPackage ./programs/ryujinx/package.nix {};
   jetbrains = unstable.callPackage ./programs/jetbrains {};
 
   inherit (unstable)
     neovim
     #jetbrains
-    gradle;
+    gradle
+    anydesk
+    wineWowPackages
+    heroic
+    lutris;
 }
 
 

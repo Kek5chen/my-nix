@@ -8,6 +8,7 @@
   };
 
   services.desktopManager.plasma6.enable = true;
+  services.xserver.windowManager.hypr.enable = true;
   services.displayManager.sddm.enable = true;
   services.displayManager = {
     autoLogin.enable = true;

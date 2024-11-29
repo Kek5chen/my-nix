@@ -10,6 +10,7 @@ let
     extensions = [ "rust-src" ];
     targets = [ "x86_64-pc-windows-gnu" ];
   };
+  unfreePredicate = import ./unfree-pkgs.nix pkgs ;
 in
 {
   imports =
@@ -36,7 +37,6 @@ in
   nix.settings.max-jobs = "auto";
   nix.extraOptions = ''
     experimental-features = nix-command flakes
-    bash-prompt = "${pkgs.zsh}/bin/zsh"
   '';
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
@@ -85,6 +85,9 @@ in
     jetbrains.idea-ultimate
     #qbittorrent
     postman
+    anydesk
+    lutris
+    discord
 
     # Free as in freedom
     librewolf
@@ -109,6 +112,8 @@ in
     jdk21
     pkg-config
     openssl
+    adwaita-qt6
+    wineWowPackages.stable
 
     # Rust
     rustBin
@@ -139,29 +144,7 @@ in
     atlauncher
   ];
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-   "spotify"
-   "atlauncher"
-   "davinci-resolve"
-
-   "steam"
-   "steam-run"
-   "steam-original"
-
-   "nordvpn"
-
-   "clion"
-   "rust-rover"
-   "idea-ultimate"
-
-   "nvidia-x11"
-   "nvidia-settings"
-
-   "rar"
-   "unrar"
-
-   "xow_dongle-firmware"
-  ];
+  nixpkgs.config.allowUnfreePredicate = unfreePredicate;
   nixpkgs.config.packageOverrides = pkgs: {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
