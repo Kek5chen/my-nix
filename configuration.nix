@@ -88,6 +88,8 @@ in
     anydesk
     lutris
     discord
+    virtualbox
+    winbox4
 
     # Free as in freedom
     librewolf
@@ -114,6 +116,11 @@ in
     openssl
     adwaita-qt6
     wineWowPackages.stable
+    nmap
+    tcpdump
+    wireshark
+    traceroute
+    inetutils
 
     # Rust
     rustBin
@@ -130,8 +137,10 @@ in
     kdePackages.konsole
     kdePackages.kate
     kdePackages.kirigami
+    kdePackages.kirigami-addons
     kdePackages.plasma-vault
     kdePackages.ksvg
+    kdePackages.kirigami
 
     element-desktop
     ryujinx
@@ -150,6 +159,23 @@ in
       inherit pkgs;
     };
   };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    openssl.dev
+    pkg-config
+
+    vulkan-headers
+    vulkan-loader
+    vulkan-validation-layers
+    
+    libGL
+
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
+  ];
 
   nixpkgs.config.element-web.conf = {
     show_labs_settings = true;

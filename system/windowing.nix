@@ -11,7 +11,7 @@
   services.xserver.windowManager.hypr.enable = true;
   services.displayManager.sddm.enable = true;
   services.displayManager = {
-    autoLogin.enable = true;
+    autoLogin.enable = false;
     autoLogin.user = "kx";
     defaultSession = "plasmax11";
   };

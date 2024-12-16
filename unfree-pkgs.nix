@@ -29,4 +29,5 @@ pkgs: pkg: builtins.elem (pkgs.lib.getName pkg) [
   "xow_dongle-firmware"
 
   "discord"
+  "winbox"
 ]

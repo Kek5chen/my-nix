@@ -10,7 +10,7 @@
       source-han-serif
       sarasa-gothic
 
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
 
       ipaexfont

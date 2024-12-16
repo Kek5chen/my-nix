@@ -1,7 +1,15 @@
 self: super:
 let
-  unfreePredicate = import ./unfree-pkgs.nix self ;
-  unstable = (import <nixpkgs-unstable> { config.allowUnfreePredicate = unfreePredicate; });
+  unfreePredicate = import ./unfree-pkgs.nix self;
+  # TODO: Remove this at some point
+  permittedInsecurePackages = [
+    "dotnet-sdk-wrapped-7.0.410"
+    "dotnet-sdk-7.0.410"
+  ];
+  unstable = (import <nixpkgs-unstable> {
+    config.allowUnfreePredicate = unfreePredicate; 
+    config.permittedInsecurePackages = permittedInsecurePackages; 
+  });
 in
 {
   ryujinx = unstable.callPackage ./programs/ryujinx/package.nix {};
