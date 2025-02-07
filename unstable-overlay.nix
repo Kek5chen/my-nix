@@ -16,13 +16,17 @@ in
   jetbrains = unstable.callPackage ./programs/jetbrains {};
 
   inherit (unstable)
+    jetbrains-toolbox
     neovim
     #jetbrains
     gradle
     anydesk
     wineWowPackages
     heroic
-    lutris;
+    lutris
+    nordpass
+    spotify
+    brave;
 }
 
 

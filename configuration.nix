@@ -23,14 +23,17 @@ in
       ./system/sound.nix
       ./system/windowing.nix
 
-      ./programs/zsh/shell.nix ./programs/nordvpn/nordvpn.nix
+      ./programs/zsh/shell.nix
       ./programs/steam/steam.nix
 
       # Home Manager
       #(import "${home-manager}/nixos")
     ];
 
-  nixpkgs.overlays = [ (import ./unstable-overlay.nix) (import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz")) ];
+  nixpkgs.overlays = [ 
+    (import ./unstable-overlay.nix)
+    (import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
+  ];
 
   nix.settings.auto-optimise-store = true;
   nix.settings.cores = 16;
@@ -44,6 +47,9 @@ in
     "v4l2loopback"
   ];
 
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "kx" ];
+
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -51,7 +57,7 @@ in
   #boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -65,7 +71,7 @@ in
 
     users.kx = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nordvpn" "docker" ];
+      extraGroups = [ "wheel" "docker" "wireshark" ];
       packages = with pkgs; [
         tree
       ];
@@ -80,23 +86,44 @@ in
     spotify
     steam
     brave
-    jetbrains.clion
-    jetbrains.rust-rover
-    jetbrains.idea-ultimate
+    # jetbrains.clion
+    # jetbrains.rust-rover
+    # jetbrains.idea-ultimate
+    jetbrains-toolbox
     #qbittorrent
     postman
     anydesk
-    lutris
+    # lutris
     discord
-    virtualbox
     winbox4
+    nordpass
+(
+      (pkgs.heroic-unwrapped.overrideAttrs (old: rec {
+        buildPhase = ''
+          runHook preBuild
+
+          # Force Electron to pull binaries, not build from source
+          export npm_config_build_from_source=false
+          export electron_config_build_from_source=false
+          export npm_config_runtime=electron
+          export npm_config_disturl=https://atom.io/download/electron
+          # e.g. pin a known Electron version:
+          # export npm_config_target=25.8.5
+
+          pnpm --offline electron-vite build
+          pnpm --ignore-scripts prune --prod
+          find node_modules/.bin -xtype l -delete
+
+          runHook postBuild
+        '';
+      }))
+    )
 
     # Free as in freedom
     librewolf
     vim
     wget
     neovim
-    heroic
     vlc
     preload
     easyeffects
@@ -113,7 +140,7 @@ in
     glib
     jdk21
     pkg-config
-    openssl
+    openssl.dev
     adwaita-qt6
     wineWowPackages.stable
     nmap
@@ -121,9 +148,15 @@ in
     wireshark
     traceroute
     inetutils
+    floorp
+    gamemode
+    tor
+    tor-browser
 
     # Rust
-    rustBin
+    # rustBin
+    # clippy
+    rustup
 
     xclip
     xsel
@@ -132,25 +165,28 @@ in
     kdePackages.plasma-desktop
     kdePackages.plasma5support
     kdePackages.qt5compat
-    kdePackages.sddm
     kdePackages.dolphin
     kdePackages.konsole
     kdePackages.kate
-    kdePackages.kirigami
-    kdePackages.kirigami-addons
     kdePackages.plasma-vault
     kdePackages.ksvg
     kdePackages.kirigami
+    kdePackages.kirigami-addons
+    kdePackages.wayland
+    kdePackages.qtwayland
+    sddm-astronaut
+    libsForQt5.kirigami2
 
+
+    atlauncher
     element-desktop
     ryujinx
     obs-studio
+    wasabiwallet
 
 
     # JP typing
     fcitx5-mozc
-
-    atlauncher
   ];
 
   nixpkgs.config.allowUnfreePredicate = unfreePredicate;
@@ -160,11 +196,12 @@ in
     };
   };
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-31.7.7"
+  ];
+
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    openssl.dev
-    pkg-config
-
     vulkan-headers
     vulkan-loader
     vulkan-validation-layers
@@ -175,7 +212,20 @@ in
     xorg.libXrandr
     xorg.libXi
     xorg.libX11
+    xorg.libXext
   ];
+
+  programs.wireshark.enable = true;
+
+  programs.gnupg.agent.enable = true;
+  services.pcscd.enable = true;
+
+  # networking.extraHosts =
+  # ''
+  #   127.0.0.1 www.youtube.com
+  #   127.0.0.1 youtube.com
+  #   127.0.0.1 m.youtube.com
+  # '';
 
   nixpkgs.config.element-web.conf = {
     show_labs_settings = true;
@@ -188,6 +238,8 @@ in
     rootless.enable = true;
     rootless.setSocketVariable = true;
   };
+
+  services.mullvad-vpn.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -2,6 +2,7 @@ pkgs: pkg: builtins.elem (pkgs.lib.getName pkg) [
   "clion"
   "rust-rover"
   "idea-ultimate"
+  "jetbrains-toolbox"
   "postman"
   "anydesk"
   "steam-unwrapped"
@@ -14,7 +15,7 @@ pkgs: pkg: builtins.elem (pkgs.lib.getName pkg) [
   "steam-run"
   "steam-original"
 
-  "nordvpn"
+  "nordpass"
 
   "clion"
   "rust-rover"
