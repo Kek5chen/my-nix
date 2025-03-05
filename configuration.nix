@@ -231,6 +231,14 @@ in
 
   services.mullvad-vpn.enable = true;
 
+  environment.variables = {
+    "__GL_SYNC_DISPLAY_DEVICE" = "DP-2";
+    "VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE" = "DP-2";
+    "KWIN_X11_REFRESH_RATE" = 165000;
+    "KWIN_X11_NO_SYNC_TO_VBLANK" = 1;
+    "KWIN_X11_FORCE_SOFTWARE_VSYNC" = 1;
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
