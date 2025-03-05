@@ -99,6 +99,8 @@ in
     discord
     winbox4
     nordpass
+    exodus
+    bitwarden-desktop
 (
       (pkgs.heroic-unwrapped.overrideAttrs (old: rec {
         buildPhase = ''
@@ -129,9 +131,11 @@ in
     vlc
     preload
     easyeffects
+    dunst
     btop
     protonup-qt
     ripgrep
+    feh
     git
     gh
     gcc
