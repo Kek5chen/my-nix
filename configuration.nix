@@ -205,21 +205,6 @@ in
     "electron-31.7.7"
   ];
 
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    vulkan-headers
-    vulkan-loader
-    vulkan-validation-layers
-    
-    libGL
-
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
-    xorg.libXext
-  ];
-
   programs.wireshark.enable = true;
 
   programs.gnupg.agent.enable = true;
