@@ -10,7 +10,6 @@ let
     extensions = [ "rust-src" ];
     targets = [ "x86_64-pc-windows-gnu" ];
   };
-  unfreePredicate = import ./unfree-pkgs.nix pkgs ;
 in
 {
   imports =
@@ -195,7 +194,7 @@ in
     fcitx5-mozc
   ];
 
-  nixpkgs.config.allowUnfreePredicate = unfreePredicate;
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.config.packageOverrides = pkgs: {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
