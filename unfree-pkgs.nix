@@ -16,6 +16,7 @@ pkgs: pkg: builtins.elem (pkgs.lib.getName pkg) [
   "steam-original"
 
   "nordpass"
+  "exodus"
 
   "clion"
   "rust-rover"
