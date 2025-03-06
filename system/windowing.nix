@@ -21,7 +21,7 @@
   services.displayManager = {
     autoLogin.enable = false;
     autoLogin.user = "kx";
-    defaultSession = "xfce+i3";
+    defaultSession = "xfce";
   };
 
   environment.systemPackages = with pkgs; [
