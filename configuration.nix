@@ -154,6 +154,7 @@ in
     inetutils
     floorp
     gamemode
+    rust-analyzer
     tor
     tor-browser
 
