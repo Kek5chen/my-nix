@@ -10,12 +10,12 @@
   }; 
   
   hardware.nvidia = {
+    open = false;
+    nvidiaSettings = true;
+    gsp.enable = true;
     modesetting.enable = true;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   # Enable CUPS to print documents.
