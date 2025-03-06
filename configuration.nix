@@ -5,7 +5,6 @@
 { config, lib, pkgs, ... }:
 
 let
-#  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   rustBin = pkgs.rust-bin.nightly.latest.default.override {
     extensions = [ "rust-src" ];
     targets = [ "x86_64-pc-windows-gnu" ];
@@ -26,7 +25,7 @@ in
       ./programs/steam/steam.nix
 
       # Home Manager
-      #(import "${home-manager}/nixos")
+      # <home-manager/nixos>
     ];
 
   nixpkgs.overlays = [ 
@@ -98,7 +97,7 @@ in
     discord
     winbox4
     nordpass
-    exodus
+    # exodus
     bitwarden-desktop
 (
       (pkgs.heroic-unwrapped.overrideAttrs (old: rec {
