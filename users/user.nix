@@ -2,14 +2,14 @@
 
 {
   programs.zsh.enable = true;
-  users.users.kx.shell = pkgs.zsh;
+  users.users.willow.shell = pkgs.zsh;
 
-  home-manager.users.kx = {
+  home-manager.users.willow = {
     imports = [ ./zsh ./hyprland ./wofi ];
 
     home.stateVersion = "24.11";
-    home.username = "kx";
-    home.homeDirectory = "/home/kx";
+    home.username = "willow";
+    home.homeDirectory = "/home/willow";
     
     programs.git = {
       enable = true;

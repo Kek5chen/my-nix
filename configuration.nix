@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       <home-manager/nixos>
       ./hardware-configuration.nix
-      ./users/kx.nix
+      ./users/user.nix
       ./window-configuration.nix
       ./programs/nordvpn/nordvpn.nix
     ];
@@ -17,6 +17,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.luks.devices."luks-6de128a9-a95f-4b6b-86fb-de4cbcf85b42".device = "/dev/disk/by-uuid/6de128a9-a95f-4b6b-86fb-de4cbcf85b42";
 
   hardware.bluetooth.enable = true;
 
@@ -39,6 +40,19 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+  
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "de_DE.UTF-8";
+    LC_IDENTIFICATION = "de_DE.UTF-8";
+    LC_MEASUREMENT = "de_DE.UTF-8";
+    LC_MONETARY = "de_DE.UTF-8";
+    LC_NAME = "de_DE.UTF-8";
+    LC_NUMERIC = "de_DE.UTF-8";
+    LC_PAPER = "de_DE.UTF-8";
+    LC_TELEPHONE = "de_DE.UTF-8";
+    LC_TIME = "de_DE.UTF-8";
+  };
+
   #console = {
   #  font = "Lat2-Terminus16";
   #  keyMap = "us";
@@ -56,34 +70,35 @@
     serif     = [ "FiraCode Nerd Font" ];
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
-  services.xserver.xkb.options = "eurosign:e,caps:escape";
-
   # Enable VPN
   # services.mullvad-vpn.enable = true;
 
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
     pulse.enable = true;
-  };
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
 
-  # Fix audio cracking / Add realtime support
-  security.rtkit.enable = true;
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users."kx" = {
+  users.users.willow = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" ];
+    description = "willow";
+    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "nordvpn" ];
+    packages = with pkgs; [
+    #  thunderbird
+    ];
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -94,6 +109,7 @@
     vim
     wget
     zsh
+    git
     floorp
     ripgrep
     vesktop
@@ -115,6 +131,9 @@
     bitwarden
     tree-sitter
     nil
+    catppuccin-gtk
+    gcc
+    clang
 
     # Networking Tools
     nmap
@@ -273,7 +292,7 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
   services.sshd = {
     enable = true;
