@@ -12,7 +12,7 @@ let
   });
 in
 {
-  ryujinx = unstable.callPackage ./programs/ryujinx/package.nix {};
+  # ryujinx = unstable.callPackage ./programs/ryujinx/package.nix {};
   jetbrains = unstable.callPackage ./programs/jetbrains {};
 
   inherit (unstable)
