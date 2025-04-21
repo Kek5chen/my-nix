@@ -22,6 +22,7 @@ in
       ./system/windowing.nix
 
       ./programs/zsh/shell.nix
+      ./programs/nordvpn/nordvpn.nix
       ./programs/steam/steam.nix
 
       # Home Manager
@@ -48,8 +49,6 @@ in
   security.rtkit.enable = true;
 
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "kx" ];
-
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -71,7 +70,7 @@ in
 
     users.kx = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "wireshark" ];
+      extraGroups = [ "wheel" "docker" "wireshark" "vboxusers" "nordvpn" ];
       packages = with pkgs; [
         tree
       ];
@@ -99,6 +98,9 @@ in
     nordpass
     # exodus
     bitwarden-desktop
+    nodejs
+    python3
+    lldb
 (
       (pkgs.heroic-unwrapped.overrideAttrs (old: rec {
         buildPhase = ''
@@ -122,10 +124,8 @@ in
     )
 
     # Free as in freedom
-    librewolf
     vim
     wget
-    neovim
     vlc
     preload
     easyeffects
@@ -135,6 +135,7 @@ in
     ripgrep
     feh
     git
+    fd
     gh
     gcc
     rar
@@ -144,7 +145,7 @@ in
     glib
     jdk21
     pkg-config
-    openssl.dev
+    openssl
     adwaita-qt6
     wineWowPackages.stable
     nmap
@@ -157,6 +158,8 @@ in
     rust-analyzer
     tor
     tor-browser
+    tree-sitter
+    llvmPackages.bintools
 
     # Rust
     # rustBin
@@ -166,6 +169,8 @@ in
     xclip
     xsel
     file
+    gnumake
+    nasm
 
     kdePackages.plasma-desktop
     kdePackages.plasma5support
@@ -181,6 +186,7 @@ in
     kdePackages.qtwayland
     sddm-astronaut
     libsForQt5.kirigami2
+    nil
 
 
     atlauncher
@@ -229,7 +235,7 @@ in
     rootless.setSocketVariable = true;
   };
 
-  services.mullvad-vpn.enable = true;
+  #services.mullvad-vpn.enable = true;
 
   environment.variables = {
     "__GL_SYNC_DISPLAY_DEVICE" = "DP-2";
@@ -237,6 +243,18 @@ in
     "KWIN_X11_REFRESH_RATE" = 165000;
     "KWIN_X11_NO_SYNC_TO_VBLANK" = 1;
     "KWIN_X11_FORCE_SOFTWARE_VSYNC" = 1;
+    "PKG_CONFIG_PATH" = "${pkgs.openssl.dev}/lib/pkgconfig";
+  };
+
+  programs.neovim = {
+    enable = true;
+
+    defaultEditor = true;
+    withRuby = true;
+    withPython3 = true;
+    withNodeJs = true;
+    vimAlias = true;
+    viAlias = true;
   };
 
   # Open ports in the firewall.
