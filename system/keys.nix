@@ -13,8 +13,16 @@
   };
 
   # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
-  services.xserver.xkb.options = "eurosign:e,caps:escape";
+  services.xserver = {
+    xkb = {
+      layout = "us";
+      options = "eurosign:e,caps:escape";
+    };
+
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 50;
+  };
+
 
   i18n.inputMethod = {
     enable = true;
