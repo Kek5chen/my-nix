@@ -17,6 +17,7 @@ in
 
   inherit (unstable)
     jetbrains-toolbox
+    neovim-unwrapped
     neovim
     #jetbrains
     gradle

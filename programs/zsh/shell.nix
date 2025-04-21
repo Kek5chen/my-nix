@@ -15,9 +15,7 @@
 
       shellAliases = with pkgs; {
         nrs = "sudo nixos-rebuild switch";
-        n = "${neovim}/bin/nvim";
-        vi = "${neovim}/bin/nvim";
-        vim = "${neovim}/bin/nvim";
+        n = "nvim";
 
         gst = "${git}/bin/git status";
         gco = "${git}/bin/git checkout";
